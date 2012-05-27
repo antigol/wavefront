@@ -8,13 +8,15 @@ GLWidget::GLWidget(QWidget *parent) :
     ObjParser parser(&_scene);
     //    parser.parse("../obj/cube.obj");
     //    parser.parse("../obj/monkey.obj");
-    parser.parse("../obj/trumpet.obj");
+    parser.parse("../obj/cessna.obj");
+    parser.parse("../obj/lamp.obj");
+
 }
 
 void GLWidget::initializeGL()
 {
     _scene.initializeGL(context());
-    _scene.setColor(QColor(Qt::black).darker(300), QColor(Qt::yellow).darker(150), Qt::white, 5.0);
+    _scene.setColor(QColor(Qt::red).darker(), QColor(Qt::yellow).lighter(), Qt::white, 10.0);
     _scene.setLight(QVector3D(0, 1, 1).normalized());
 }
 
@@ -70,6 +72,6 @@ void GLWidget::mouseMoveEvent(QMouseEvent *e)
 #include <QWheelEvent>
 void GLWidget::wheelEvent(QWheelEvent *e)
 {
-    z += e->delta();
+    z += float(e->delta()) * 0.01;
     updateGL();
 }
