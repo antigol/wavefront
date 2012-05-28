@@ -24,9 +24,12 @@ public:
     void addQuad(QVector3D v1, QVector3D v2, QVector3D v3, QVector3D v4);
     void addPolygon(QList<QVector3D> v);
 
+    void setCurrentObject(const QString &name);
+    void setCurrentGroup(const QString &name);
+
     void clear();
     void initializeGL(const QGLContext *context);
-    void drawGL();
+    void drawGL(const QString &object = QString(), const QString &group = QString());
 
     void setModel(const QMatrix4x4 &m);
     void setView(const QMatrix4x4 &v);
@@ -36,6 +39,9 @@ public:
     void setLight(const QVector3D &lightPosition);
 
 private:
+    QString _currentObject;
+    QString _currentGroup;
+
     QList<ObjMesh> _elements;
     QGLShaderProgram *_program;
     QGLBuffer _vbo;

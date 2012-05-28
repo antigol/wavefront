@@ -15,7 +15,7 @@ GLWidget::GLWidget(QWidget *parent) :
     parser.parse("../wavefront/stem.obj");
 //    parser.parse("../obj/torus.obj");
 
-    _pendulum.setParameters(1.0, 1.0, 2.0, 1.0, 0.0, 0.0);
+    _pendulum.setParameters(1.0, 1.0, 1.0, 1.0, 0.0, 0.0);
 
     _oldTime = 0.0;
     _time.start();
