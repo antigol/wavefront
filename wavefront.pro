@@ -14,17 +14,19 @@ SOURCES += main.cpp\
     objparser.cpp \
     objmesh.cpp \
     objscene.cpp \
-    glwidget.cpp
+    glwidget.cpp \
+    doublependulum.cpp
 
 HEADERS  += \
     objparser.h \
     objmesh.h \
     objscene.h \
-    glwidget.h
+    glwidget.h \
+    doublependulum.h
 
 OTHER_FILES += \
-    shader.vert \
-    shader.frag
+    objshader.frag \
+    objshader.vert
 
 RESOURCES += \
     data.qrc

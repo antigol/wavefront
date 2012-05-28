@@ -3,7 +3,9 @@
 
 #include <QtOpenGL/QGLWidget>
 #include <QMatrix4x4>
+#include <QTime>
 #include "objscene.h"
+#include "doublependulum.h"
 
 class GLWidget : public QGLWidget
 {
@@ -19,13 +21,18 @@ private:
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
     void wheelEvent(QWheelEvent *e);
+    void timerEvent(QTimerEvent *);
     
     QPointF _oldmouseposition;
-    float a, b;
-    float u, v;
-    float z;
+    float _a, _b;
+    float _z;
 
     ObjScene _scene;
+
+    QTime _time;
+    double _oldTime;
+
+    DoublePendulum _pendulum;
 };
 
 #endif // GLWIDGET_H

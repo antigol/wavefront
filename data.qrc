@@ -1,6 +1,6 @@
 <RCC>
-    <qresource prefix="/glsl">
-        <file>shader.frag</file>
-        <file>shader.vert</file>
+    <qresource prefix="/files">
+        <file>objshader.frag</file>
+        <file>objshader.vert</file>
     </qresource>
 </RCC>

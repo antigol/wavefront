@@ -76,8 +76,8 @@ void ObjScene::clear()
 void ObjScene::initializeGL(const QGLContext *context)
 {
     _program = new QGLShaderProgram(context, this);
-    _program->addShaderFromSourceFile(QGLShader::Vertex, ":/glsl/shader.vert");
-    _program->addShaderFromSourceFile(QGLShader::Fragment, ":/glsl/shader.frag");
+    _program->addShaderFromSourceFile(QGLShader::Vertex, ":/files/objshader.vert");
+    _program->addShaderFromSourceFile(QGLShader::Fragment, ":/files/objshader.frag");
     if (!_program->link())
         qDebug() << _program->log();
 
