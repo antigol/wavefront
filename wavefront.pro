@@ -15,14 +15,16 @@ SOURCES += main.cpp\
     objmesh.cpp \
     objscene.cpp \
     glwidget.cpp \
-    doublependulum.cpp
+    doublependulum.cpp \
+    linepath.cpp
 
 HEADERS  += \
     objparser.h \
     objmesh.h \
     objscene.h \
     glwidget.h \
-    doublependulum.h
+    doublependulum.h \
+    linepath.h
 
 OTHER_FILES += \
     objshader.frag \
