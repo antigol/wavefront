@@ -1,6 +1,6 @@
 #version 130
-attribute vec3 vertex;
-attribute vec3 normal;
+in vec3 vertex;
+in vec3 normal;
 
 uniform mat4 matrixp; // projection
 uniform mat4 matrixv; // view (camera)

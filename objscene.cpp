@@ -120,9 +120,9 @@ void ObjScene::drawGL()
     _program->setAttributeBuffer(normalLocation, GL_FLOAT, sizeof (QVector3D), 3, sizeof (QVector3D) * 2);
 
     int first = 0;
-    qDebug() << "start drawing";
+//    qDebug() << "start drawing";
     for (int i = 0; i < _elements.size(); ++i) {
-        qDebug() << "darw #" << i+1 << " mode(" << (_elements[i].mode() == GL_TRIANGLES ? "GL_TRIANGLES" : _elements[i].mode() == GL_QUADS ? "GL_QUADS" : "GL_POLYGON")  << ")" << first << _elements[i]._vertices.size() / 2;
+//        qDebug() << "darw #" << i+1 << " mode(" << (_elements[i].mode() == GL_TRIANGLES ? "GL_TRIANGLES" : _elements[i].mode() == GL_QUADS ? "GL_QUADS" : "GL_POLYGON")  << ")" << first << _elements[i]._vertices.size() / 2;
         glDrawArrays(_elements[i].mode(), first, _elements[i]._vertices.size() / 2);
         first += _elements[i]._vertices.size() / 2;
     }

@@ -10,6 +10,8 @@ uniform vec4 specular;
 uniform float hardness;
 uniform vec3 light; // is given in model coordinates
 
+out vec4 color;
+
 void main(void)
 {
     float dfactor = clamp(dot(light, normalize(n)), 0.0, 1.0);
@@ -18,5 +20,5 @@ void main(void)
     vec3 i = e - 2.0 * n * dot(e, n); // reflection
     float sfactor = pow(clamp(dot(mat3(matrixv) * light, i), 0.0, 1.0), hardness);
 
-    gl_FragColor = ambiant + dfactor * diffuse + sfactor * specular;
+    color = ambiant + dfactor * diffuse + sfactor * specular;
 }

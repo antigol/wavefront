@@ -11,7 +11,7 @@ GLWidget::GLWidget(QWidget *parent) :
 //    parser.parse("../obj/icosahedron.obj");
 //    parser.parse("../obj/untitled.obj");
 //    parser.parse("../obj/monkey.obj");
-    parser.parse("../obj/cessna2.obj");
+    parser.parse("../wavefront/cessna2.obj");
 //    parser.parse("../obj/torus.obj");
 }
 
@@ -65,8 +65,8 @@ void GLWidget::mouseMoveEvent(QMouseEvent *e)
     _oldmouseposition = e->posF();
 
     if (e->buttons() & Qt::LeftButton) {
-        a += d.x();
-        b += d.y();
+        a += d.x() * 0.5;
+        b += d.y() * 0.5;
         b = b < -90.0 ? -90.0 : b > 90.0 ? 90.0 : b;
     }
     if (e->buttons() & Qt::RightButton) {
