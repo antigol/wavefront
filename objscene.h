@@ -28,10 +28,11 @@ public:
     void initializeGL(const QGLContext *context);
     void drawGL();
 
+    void setModel(const QMatrix4x4 &m);
+    void setView(const QMatrix4x4 &v);
     void setProjection(const QMatrix4x4 &p);
-    void setModelView(const QMatrix4x4 &m);
 
-    void setColor(const QColor &ambiant, const QColor &diffuse, const QColor &specular, GLfloat specularpower);
+    void setColor(const QColor &ambiant, const QColor &diffuse, const QColor &specular, GLfloat hardness);
     void setLight(const QVector3D &lightPosition);
 
 private:
@@ -42,12 +43,13 @@ private:
     int vertexLocation;
     int normalLocation;
     int projectionLocation;
-    int modelviewLocation;
+    int viewLocation;
+    int modelLocation;
 
     int ambiantLocation;
     int diffuseLocation;
     int specularLocation;
-    int specularpowerLocation;
+    int hardnessLocation;
     int lightLocation;
 };
 

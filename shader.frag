@@ -1,20 +1,22 @@
 #version 130
-in vec3 n;
-in vec3 p;
+in vec3 n; // in model coordinates
+in vec3 p; // in view coordinates
+
+uniform mat4 matrixv; // view (camera)
 
 uniform vec4 ambiant;
 uniform vec4 diffuse;
 uniform vec4 specular;
-uniform float specularpower;
-uniform vec3 light;
+uniform float hardness;
+uniform vec3 light; // is given in model coordinates
 
 void main(void)
 {
     float dfactor = clamp(dot(light, normalize(n)), 0.0, 1.0);
 
-    vec3 np = normalize(p);
-    vec3 i = np - 2.0 * n * dot(np, n);
-    float sfactor = pow(clamp(dot(light, i), 0.0, 1.0), specularpower);
+    vec3 e = normalize(p);
+    vec3 i = e - 2.0 * n * dot(e, n); // reflection
+    float sfactor = pow(clamp(dot(mat3(matrixv) * light, i), 0.0, 1.0), hardness);
 
     gl_FragColor = ambiant + dfactor * diffuse + sfactor * specular;
 }

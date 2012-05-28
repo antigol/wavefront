@@ -83,12 +83,13 @@ void ObjScene::initializeGL(const QGLContext *context)
 
     vertexLocation = _program->attributeLocation("vertex");
     normalLocation = _program->attributeLocation("normal");
+    modelLocation = _program->uniformLocation("matrixm");
+    viewLocation = _program->uniformLocation("matrixv");
     projectionLocation = _program->uniformLocation("matrixp");
-    modelviewLocation = _program->uniformLocation("matrixmv");
     ambiantLocation = _program->uniformLocation("ambiant");
     diffuseLocation = _program->uniformLocation("diffuse");
     specularLocation = _program->uniformLocation("specular");
-    specularpowerLocation = _program->uniformLocation("specularpower");
+    hardnessLocation = _program->uniformLocation("hardness");
     lightLocation = _program->uniformLocation("light");
 
     // tout mettre dans le VBO
@@ -98,6 +99,7 @@ void ObjScene::initializeGL(const QGLContext *context)
     for (int i = 0; i < _elements.size(); ++i) {
         size += _elements[i]._vertices.size();
     }
+    qDebug() << float(size * sizeof (QVector3D)) / 1024 << "kilobyte";
     _vbo.allocate(size * sizeof (QVector3D));
     int offset = 0;
     for (int i = 0; i < _elements.size(); ++i) {
@@ -120,7 +122,7 @@ void ObjScene::drawGL()
     int first = 0;
     qDebug() << "start drawing";
     for (int i = 0; i < _elements.size(); ++i) {
-        qDebug() << "darw " << _elements[i].mode() << first << _elements[i]._vertices.size() / 2;
+        qDebug() << "darw #" << i+1 << " mode(" << (_elements[i].mode() == GL_TRIANGLES ? "GL_TRIANGLES" : _elements[i].mode() == GL_QUADS ? "GL_QUADS" : "GL_POLYGON")  << ")" << first << _elements[i]._vertices.size() / 2;
         glDrawArrays(_elements[i].mode(), first, _elements[i]._vertices.size() / 2);
         first += _elements[i]._vertices.size() / 2;
     }
@@ -132,6 +134,20 @@ void ObjScene::drawGL()
     _program->release();
 }
 
+void ObjScene::setModel(const QMatrix4x4 &m)
+{
+    _program->bind();
+    _program->setUniformValue(modelLocation, m);
+    _program->release();
+}
+
+void ObjScene::setView(const QMatrix4x4 &v)
+{
+    _program->bind();
+    _program->setUniformValue(viewLocation, v);
+    _program->release();
+}
+
 void ObjScene::setProjection(const QMatrix4x4 &p)
 {
     _program->bind();
@@ -139,20 +155,13 @@ void ObjScene::setProjection(const QMatrix4x4 &p)
     _program->release();
 }
 
-void ObjScene::setModelView(const QMatrix4x4 &m)
-{
-    _program->bind();
-    _program->setUniformValue(modelviewLocation, m);
-    _program->release();
-}
-
-void ObjScene::setColor(const QColor &ambiant, const QColor &diffuse, const QColor &specular, GLfloat specularpower)
+void ObjScene::setColor(const QColor &ambiant, const QColor &diffuse, const QColor &specular, GLfloat hardness)
 {
     _program->bind();
     _program->setUniformValue(ambiantLocation, ambiant);
     _program->setUniformValue(diffuseLocation, diffuse);
     _program->setUniformValue(specularLocation, specular);
-    _program->setUniformValue(specularpowerLocation, specularpower);
+    _program->setUniformValue(hardnessLocation, hardness);
     _program->release();
 }
 
