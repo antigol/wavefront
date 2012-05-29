@@ -41,6 +41,7 @@ void LinePath::drawGL()
     _program->bind();
     _program->enableAttributeArray(vertexLocation);
 
+    ///!!  TODO : faire du vbo !
     glBegin(GL_LINE_STRIP);
     for (int i = 0; i < _vertices.size(); ++i) {
         glVertex3f(_vertices[i].x(), _vertices[i].y(), _vertices[i].z());
