@@ -4,5 +4,6 @@
         <file>objshader.vert</file>
         <file>linepath.frag</file>
         <file>linepath.vert</file>
+        <file>stem.obj</file>
     </qresource>
 </RCC>

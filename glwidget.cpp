@@ -4,7 +4,7 @@
 #include <cmath>
 
 GLWidget::GLWidget(QWidget *parent) :
-    QGLWidget(parent), _a(0.0), _b(0.0), _z(-50.0)
+    QGLWidget(parent), _a(0.0), _b(0.0), _z(-55.0)
 {
     ObjParser parser(&_scene);
     //    parser.parse("../obj/cube.obj");
@@ -13,7 +13,7 @@ GLWidget::GLWidget(QWidget *parent) :
 //    parser.parse("../obj/untitled.obj");
 //    parser.parse("../obj/monkey.obj");
 //    parser.parse("../wavefront/suzanne.obj");
-    parser.parse("../wavefront/stem.obj");
+    parser.parse(":/files/stem.obj");
 //    parser.parse("../obj/torus.obj");
 
     _oldTime = 0.0;
@@ -122,14 +122,12 @@ void GLWidget::mouseMoveEvent(QMouseEvent *e)
         _b += d.y() * 0.5;
         _b = _b < -90.0 ? -90.0 : _b > 90.0 ? 90.0 : _b;
     }
-    updateGL();
 }
 
 #include <QWheelEvent>
 void GLWidget::wheelEvent(QWheelEvent *e)
 {
     _z *= pow(0.999, e->delta());
-    updateGL();
 }
 
 void GLWidget::timerEvent(QTimerEvent *)
