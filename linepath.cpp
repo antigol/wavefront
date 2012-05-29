@@ -1,50 +1,18 @@
 #include "linepath.h"
 #define MAXSIZE int(1024 * sizeof (QVector3D))
 
-LinePath::LinePath() :
-    _size(0)
+LinePath::LinePath()
 {
 }
 
 void LinePath::addPoint(const QVector3D &p)
 {
-    if (_size < MAXSIZE && !_vbolist.isEmpty()) {
-        QGLBuffer &vbo = _vbolist.last();
-
-        Q_ASSERT(vbo.bind());
-        vbo.write(_size, &p, sizeof (QVector3D));
-        vbo.release();
-        _last = p;
-        _size += sizeof (QVector3D);
-    } else {
-        _size = 0;
-
-        _vbolist << QGLBuffer(QGLBuffer::VertexBuffer);
-        QGLBuffer &vbo = _vbolist.last();
-
-        vbo.setUsagePattern(QGLBuffer::DynamicDraw);
-        Q_ASSERT(vbo.create());
-        vbo.allocate(MAXSIZE);
-        Q_ASSERT(vbo.bind());
-
-        if (_vbolist.size() > 1) {
-            vbo.write(_size, &_last, sizeof (QVector3D));
-            _size += sizeof (QVector3D);
-        }
-
-        vbo.write(_size, &p, sizeof (QVector3D));
-        _size += sizeof (QVector3D);
-
-        vbo.release();
-    }
-
-    qDebug() << _vbolist.size() << _size;
+    _vertices.append(p);
 }
 
 void LinePath::clear()
 {
-    _vbolist.clear();
-    _size = 0;
+    _vertices.clear();
 }
 
 void LinePath::initializeGL(const QGLContext *context)
@@ -73,14 +41,11 @@ void LinePath::drawGL()
     _program->bind();
     _program->enableAttributeArray(vertexLocation);
 
-    for (int i = 0; i < _vbolist.size(); ++i) {
-        Q_ASSERT(_vbolist[i].bind());
-
-        _program->setAttributeBuffer(vertexLocation, GL_FLOAT, 0, 3);
-        glDrawArrays(GL_LINE_STRIP, 0, (i+1 == _vbolist.size() ? _size : MAXSIZE) / sizeof (QVector3D));
-
-        _vbolist[i].release();
+    glBegin(GL_LINE_STRIP);
+    for (int i = 0; i < _vertices.size(); ++i) {
+        glVertex3f(_vertices[i].x(), _vertices[i].y(), _vertices[i].z());
     }
+    glEnd();
 
     _program->disableAttributeArray(vertexLocation);
     _program->release();

@@ -18,7 +18,8 @@ GLWidget::GLWidget(QWidget *parent) :
 
     _oldTime = 0.0;
     _time.start();
-    _pendulum.setParameters(1.0, 1.0, 1.0, 1.0, 0.0, 0.0);
+    _pendulum.setParameters(1.0, 1.0, 1.1, 0.7, 90.0, 89.0);
+    _pendulum.reset();
 
 
     startTimer(0);
@@ -30,7 +31,7 @@ void GLWidget::initializeGL()
     _scene.setLight(QVector3D(0, 1, 1).normalized());
 
     _linepath.initializeGL(context());
-    _linepath.setColor(Qt::red, Qt::white, 0.1);
+    _linepath.setColor(Qt::red, Qt::white, 0.5);
 }
 
 void GLWidget::resizeGL(int w, int h)
@@ -71,6 +72,7 @@ void GLWidget::paintGL()
     _scene.setColor(QColor(Qt::blue).darker(), QColor(Qt::cyan).lighter(), Qt::white, 10.0);
     _scene.drawGL();
 
+    m.translate(8.0, 0.0, 0.0);
     QVector3D p = m.map(QVector3D(0.0, 0.0, 0.0));
     _linepath.addPoint(p);
 }

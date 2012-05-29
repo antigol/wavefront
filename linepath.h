@@ -24,9 +24,7 @@ public:
     void setColor(const QColor &color1, const QColor &color2, GLfloat step);
 
 public:
-    QList<QGLBuffer> _vbolist;
-    int _size;
-    QVector3D _last;
+    QVector<QVector3D> _vertices;
 
     QGLShaderProgram *_program;
 
