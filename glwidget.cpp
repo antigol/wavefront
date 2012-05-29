@@ -12,13 +12,13 @@ GLWidget::GLWidget(QWidget *parent) :
 //    parser.parse("../obj/icosahedron.obj");
 //    parser.parse("../obj/untitled.obj");
 //    parser.parse("../obj/monkey.obj");
-    parser.parse("../wavefront/suzanne.obj");
+//    parser.parse("../wavefront/suzanne.obj");
     parser.parse("../wavefront/stem.obj");
 //    parser.parse("../obj/torus.obj");
 
     _oldTime = 0.0;
     _time.start();
-    _pendulum.setParameters(1.0, 1.0, 1.1, 0.7, 90.0, 89.0);
+    _pendulum.setParameters(1.0, 1.0, 1.0, 1.0, 0.0, 80.0);
     _pendulum.reset();
 
 
@@ -63,16 +63,17 @@ void GLWidget::paintGL()
     m.rotate(_pendulum.a1(), 0.0, 0.0, 1.0);
     _scene.setModel(m);
     _scene.setColor(QColor(Qt::red).darker(), QColor(Qt::yellow).lighter(), Qt::white, 10.0);
-    _scene.drawGL();
+    _scene.drawGL("stem1");
 
-    m.translate(8.0, 0.0, 0.0);
+    m.translate(10.0, 0.0, 0.0);
     m.scale(_pendulum.l2() / _pendulum.l1(), 1.0, 1.0);
     m.rotate(_pendulum.a2() - _pendulum.a1(), 0.0, 0.0, 1.0);
+    m.translate(0.0, 0.0, -1.5);
     _scene.setModel(m);
     _scene.setColor(QColor(Qt::blue).darker(), QColor(Qt::cyan).lighter(), Qt::white, 10.0);
-    _scene.drawGL();
+    _scene.drawGL("stem2");
 
-    m.translate(8.0, 0.0, 0.0);
+    m.translate(10.0, 0.0, 0.0);
     QVector3D p = m.map(QVector3D(0.0, 0.0, 0.0));
     _linepath.addPoint(p);
 }

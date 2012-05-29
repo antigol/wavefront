@@ -8,7 +8,10 @@ ObjScene::ObjScene(QObject *parent) :
 
 void ObjScene::addTriangleWithNormals(QVector3D v1, QVector3D vn1, QVector3D v2, QVector3D vn2, QVector3D v3, QVector3D vn3)
 {
-    if (_elements.isEmpty() || _elements.last().mode() != GL_TRIANGLES)
+    if (_elements.isEmpty()
+            || _elements.last().mode() != GL_TRIANGLES
+            || _elements.last()._objectName != _currentObject
+            || _elements.last()._groupName != _currentGroup)
         _elements.append(ObjMesh(GL_TRIANGLES, _currentObject, _currentGroup));
 
     ObjMesh &mesh = _elements.last();
@@ -19,7 +22,10 @@ void ObjScene::addTriangleWithNormals(QVector3D v1, QVector3D vn1, QVector3D v2,
 
 void ObjScene::addQuadWithNormals(QVector3D v1, QVector3D vn1, QVector3D v2, QVector3D vn2, QVector3D v3, QVector3D vn3, QVector3D v4, QVector3D vn4)
 {
-    if (_elements.isEmpty() || _elements.last().mode() != GL_QUADS)
+    if (_elements.isEmpty()
+            || _elements.last().mode() != GL_QUADS
+            || _elements.last()._objectName != _currentObject
+            || _elements.last()._groupName != _currentGroup)
         _elements.append(ObjMesh(GL_QUADS, _currentObject, _currentGroup));
 
     ObjMesh &mesh = _elements.last();
@@ -142,9 +148,9 @@ void ObjScene::drawGL(const QString &object, const QString &group)
             if (group.isEmpty() || _elements[i]._groupName == group) {
                 //        qDebug() << "darw #" << i+1 << " mode(" << (_elements[i].mode() == GL_TRIANGLES ? "GL_TRIANGLES" : _elements[i].mode() == GL_QUADS ? "GL_QUADS" : "GL_POLYGON")  << ")" << first << _elements[i]._vertices.size() / 2;
                 glDrawArrays(_elements[i].mode(), first, _elements[i]._vertices.size() / 2);
-                first += _elements[i]._vertices.size() / 2;
             }
         }
+        first += _elements[i]._vertices.size() / 2;
     }
 
     _vbo.release();

@@ -17,7 +17,7 @@ class ObjScene;
 class ObjMesh
 {
 public:
-    ObjMesh(GLenum mode, const QString &objectName = QString(), const QString &groupName = QString());
+    ObjMesh(GLenum mode, const QString &objectName, const QString &groupName);
     GLenum mode() const;
     void addVertex(const QVector3D &v, const QVector3D &vn);
 
