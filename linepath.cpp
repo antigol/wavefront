@@ -23,13 +23,13 @@ void LinePath::initializeGL(const QGLContext *context)
     if (!_program->link())
         qDebug() << _program->log();
 
-    vertexLocation = _program->attributeLocation("vertex");
-    modelLocation = _program->uniformLocation("matrixm");
-    viewLocation = _program->uniformLocation("matrixv");
-    projectionLocation = _program->uniformLocation("matrixp");
-    color1Location = _program->uniformLocation("color1");
-    color2Location = _program->uniformLocation("color2");
-    stepLocation = _program->uniformLocation("step");
+    _vertexLocation = _program->attributeLocation("vertex");
+    _modelLocation = _program->uniformLocation("matrixm");
+    _viewLocation = _program->uniformLocation("matrixv");
+    _projectionLocation = _program->uniformLocation("matrixp");
+    _color1Location = _program->uniformLocation("color1");
+    _color2Location = _program->uniformLocation("color2");
+    _stepLocation = _program->uniformLocation("step");
 
     setProjection(QMatrix4x4());
     setView(QMatrix4x4());
@@ -39,7 +39,7 @@ void LinePath::initializeGL(const QGLContext *context)
 void LinePath::drawGL()
 {
     _program->bind();
-    _program->enableAttributeArray(vertexLocation);
+    _program->enableAttributeArray(_vertexLocation);
 
     ///!!  TODO : faire du vbo !
     glBegin(GL_LINE_STRIP);
@@ -48,36 +48,46 @@ void LinePath::drawGL()
     }
     glEnd();
 
-    _program->disableAttributeArray(vertexLocation);
+//    QGLBuffer vbo(QGLBuffer::VertexBuffer);
+//    vbo.create();
+//    vbo.allocate(_vertices.constData(), _vertices.size() * sizeof (QVector3D));
+//    vbo.bind();
+
+//    _program->setAttributeBuffer(_vertexLocation, GL_FLOAT, 0, 3, 0);
+//    glDrawArrays(GL_LINE_STRIP, 0, _vertices.size());
+
+//    vbo.release();
+
+    _program->disableAttributeArray(_vertexLocation);
     _program->release();
 }
 
 void LinePath::setModel(const QMatrix4x4 &m)
 {
     _program->bind();
-    _program->setUniformValue(modelLocation, m);
+    _program->setUniformValue(_modelLocation, m);
     _program->release();
 }
 
 void LinePath::setView(const QMatrix4x4 &v)
 {
     _program->bind();
-    _program->setUniformValue(viewLocation, v);
+    _program->setUniformValue(_viewLocation, v);
     _program->release();
 }
 
 void LinePath::setProjection(const QMatrix4x4 &p)
 {
     _program->bind();
-    _program->setUniformValue(projectionLocation, p);
+    _program->setUniformValue(_projectionLocation, p);
     _program->release();
 }
 
 void LinePath::setColor(const QColor &color1, const QColor &color2, GLfloat step)
 {
     _program->bind();
-    _program->setUniformValue(color1Location, color1);
-    _program->setUniformValue(color2Location, color2);
-    _program->setUniformValue(stepLocation, step);
+    _program->setUniformValue(_color1Location, color1);
+    _program->setUniformValue(_color2Location, color2);
+    _program->setUniformValue(_stepLocation, step);
     _program->release();
 }

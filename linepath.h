@@ -28,13 +28,13 @@ public:
 
     QGLShaderProgram *_program;
 
-    int vertexLocation;
-    int modelLocation;
-    int viewLocation;
-    int projectionLocation;
-    int color1Location;
-    int color2Location;
-    int stepLocation;
+    int _vertexLocation;
+    int _modelLocation;
+    int _viewLocation;
+    int _projectionLocation;
+    int _color1Location;
+    int _color2Location;
+    int _stepLocation;
 };
 
 #endif // LINEPATH_H
