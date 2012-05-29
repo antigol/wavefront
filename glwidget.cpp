@@ -4,7 +4,7 @@
 #include <cmath>
 
 GLWidget::GLWidget(QWidget *parent) :
-    QGLWidget(parent), _a(0.0), _b(0.0), _z(-20.0)
+    QGLWidget(parent), _a(0.0), _b(0.0), _z(-50.0)
 {
     ObjParser parser(&_scene);
     //    parser.parse("../obj/cube.obj");
@@ -18,7 +18,7 @@ GLWidget::GLWidget(QWidget *parent) :
 
     _oldTime = 0.0;
     _time.start();
-    _pendulum.setParameters(1.0, 1.0, 1.0, 1.0, 0.0, 80.0);
+    _pendulum.setParameters(1.0, 1.0, 1.0, 1.0, 75.0, 80.0);
     _pendulum.reset();
 
 
@@ -28,10 +28,10 @@ GLWidget::GLWidget(QWidget *parent) :
 void GLWidget::initializeGL()
 {
     _scene.initializeGL(context());
-    _scene.setLight(QVector3D(0, 1, 1).normalized());
+    _scene.setLight(QVector3D(1, 1, -1).normalized());
 
     _linepath.initializeGL(context());
-    _linepath.setColor(Qt::red, Qt::white, 0.5);
+    _linepath.setColor(Qt::red, Qt::white, 10.0);
 }
 
 void GLWidget::resizeGL(int w, int h)
@@ -59,15 +59,43 @@ void GLWidget::paintGL()
     _linepath.drawGL();
 
     m.setToIdentity();
-    m.scale(_pendulum.l1(), 1.0, 1.0);
+    m.translate(0.0, 0.0, 2.5);
+
+    _scene.setModel(m);
+    _scene.setColor(QColor(Qt::gray).darker(), Qt::gray, Qt::white, 50.0);
+    _scene.drawGL("basis");
+
+    m.translate(0.0, 0.0, -5.0);
+    m.scale(1.0, 1.0, -1.0);
+    _scene.setModel(m);
+    _scene.drawGL("basis");
+
+    m.translate(0.0, 0.0, -5.0);
+    m.scale(1.0, 1.0, -1.0);
+
+
     m.rotate(_pendulum.a1(), 0.0, 0.0, 1.0);
+    m.scale(_pendulum.l1(), 1.0, 1.0);
+
+    m.translate(0.0, 0.0, -1.0);
     _scene.setModel(m);
     _scene.setColor(QColor(Qt::red).darker(), QColor(Qt::yellow).lighter(), Qt::white, 10.0);
     _scene.drawGL("stem1");
 
+    m.translate(0.0, 0.0, -3.0);
+    m.scale(1.0, 1.0, -1.0);
+    _scene.setModel(m);
+    _scene.drawGL("stem1");
+    m.translate(0.0, 0.0, -3.0);
+    m.scale(1.0, 1.0, -1.0);
+
+
     m.translate(10.0, 0.0, 0.0);
-    m.scale(_pendulum.l2() / _pendulum.l1(), 1.0, 1.0);
+    m.scale(1.0/_pendulum.l1(), 1.0, 1.0);
+
+
     m.rotate(_pendulum.a2() - _pendulum.a1(), 0.0, 0.0, 1.0);
+    m.scale(_pendulum.l2(), 1.0, 1.0);
     m.translate(0.0, 0.0, -1.5);
     _scene.setModel(m);
     _scene.setColor(QColor(Qt::blue).darker(), QColor(Qt::cyan).lighter(), Qt::white, 10.0);
@@ -111,9 +139,18 @@ void GLWidget::timerEvent(QTimerEvent *)
     _oldTime = time;
 
     if (dt != 0.0) {
-        _a += dt * 5.0;
-        if (_a > 360.0) _a -= 360.0;
         _pendulum.move(dt);
         updateGL();
+    }
+}
+
+#include <QKeyEvent>
+void GLWidget::keyPressEvent(QKeyEvent *e)
+{
+    switch (e->key()) {
+    case Qt::Key_Space:
+        _linepath.clear();
+        _pendulum.reset();
+        break;
     }
 }

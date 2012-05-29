@@ -23,6 +23,7 @@ private:
     void mouseMoveEvent(QMouseEvent *e);
     void wheelEvent(QWheelEvent *e);
     void timerEvent(QTimerEvent *);
+    void keyPressEvent(QKeyEvent *e);
     
     QPointF _oldmouseposition;
     float _a, _b;

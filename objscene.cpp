@@ -144,9 +144,9 @@ void ObjScene::drawGL(const QString &object, const QString &group)
     int first = 0;
     //    qDebug() << "start drawing";
     for (int i = 0; i < _elements.size(); ++i) {
-        if (object.isEmpty() || _elements[i]._objectName == object) {
+        if (object.isEmpty() || _elements[i]._objectName.startsWith(object+"_")) {
             if (group.isEmpty() || _elements[i]._groupName == group) {
-                //        qDebug() << "darw #" << i+1 << " mode(" << (_elements[i].mode() == GL_TRIANGLES ? "GL_TRIANGLES" : _elements[i].mode() == GL_QUADS ? "GL_QUADS" : "GL_POLYGON")  << ")" << first << _elements[i]._vertices.size() / 2;
+//                qDebug() << "darw #" << i+1 << " mode(" << (_elements[i].mode() == GL_TRIANGLES ? "GL_TRIANGLES" : _elements[i].mode() == GL_QUADS ? "GL_QUADS" : "GL_POLYGON")  << ")" << first << _elements[i]._vertices.size() / 2;
                 glDrawArrays(_elements[i].mode(), first, _elements[i]._vertices.size() / 2);
             }
         }
