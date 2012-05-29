@@ -35,35 +35,42 @@ void ObjParser::parse(const QString &filename)
             input.readLine(); // skip line
         }
 
-        if (keyWord == "mtllib") {
-            // parse le fichier materiaux avec ObjMtlParser
-        }
-
-        if (keyWord == "o") {
-            // on s'en fiche
-            input.readLine(); // skip line
-        }
-
-        if (keyWord == "v") {
-            parseV(input);
-        }
-
-        if (keyWord == "vt") {
+        else if (keyWord == "mtllib") {
             // en s'en fiche
             input.readLine(); // skip line
         }
 
-        if (keyWord == "vn") {
+        else if (keyWord == "o") {
+            QString str;
+            input >> str;
+            _scene->setCurrentObject(str);
+        }
+
+        else if (keyWord == "g") {
+            QString str;
+            input >> str;
+            _scene->setCurrentGroup(str);
+        }
+
+        else if (keyWord == "v") {
+            parseV(input);
+        }
+
+        else if (keyWord == "vt") {
+            // en s'en fiche
+            input.readLine(); // skip line
+        }
+
+        else if (keyWord == "vn") {
             parseVN(input);
         }
 
-        if (keyWord == "usemtl") {
-            QString material;
-            input >> material;
-//            _scene->usemtl(material);
+        else if (keyWord == "usemtl") {
+            // en s'en fiche
+            input.readLine(); // skip line
         }
 
-        if (keyWord == "f") {
+        else if (keyWord == "f") {
             parseFace(input);
         }
     }

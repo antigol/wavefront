@@ -1,7 +1,7 @@
 #include "objmesh.h"
 
-ObjMesh::ObjMesh(GLenum mode) :
-    _mode(mode)
+ObjMesh::ObjMesh(GLenum mode, const QString &objectName, const QString &groupName) :
+    _mode(mode), _objectName(objectName), _groupName(groupName)
 {
 }
 

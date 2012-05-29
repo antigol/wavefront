@@ -9,7 +9,7 @@ ObjScene::ObjScene(QObject *parent) :
 void ObjScene::addTriangleWithNormals(QVector3D v1, QVector3D vn1, QVector3D v2, QVector3D vn2, QVector3D v3, QVector3D vn3)
 {
     if (_elements.isEmpty() || _elements.last().mode() != GL_TRIANGLES)
-        _elements.append(ObjMesh(GL_TRIANGLES));
+        _elements.append(ObjMesh(GL_TRIANGLES, _currentObject, _currentGroup));
 
     ObjMesh &mesh = _elements.last();
     mesh.addVertex(v1, vn1);
@@ -20,7 +20,7 @@ void ObjScene::addTriangleWithNormals(QVector3D v1, QVector3D vn1, QVector3D v2,
 void ObjScene::addQuadWithNormals(QVector3D v1, QVector3D vn1, QVector3D v2, QVector3D vn2, QVector3D v3, QVector3D vn3, QVector3D v4, QVector3D vn4)
 {
     if (_elements.isEmpty() || _elements.last().mode() != GL_QUADS)
-        _elements.append(ObjMesh(GL_QUADS));
+        _elements.append(ObjMesh(GL_QUADS, _currentObject, _currentGroup));
 
     ObjMesh &mesh = _elements.last();
     mesh.addVertex(v1, vn1);
@@ -31,7 +31,7 @@ void ObjScene::addQuadWithNormals(QVector3D v1, QVector3D vn1, QVector3D v2, QVe
 
 void ObjScene::addPolygonWithNormals(QList<QVector3D> v, QList<QVector3D> vn)
 {
-    _elements.append(ObjMesh(GL_POLYGON));
+    _elements.append(ObjMesh(GL_POLYGON, _currentObject, _currentGroup));
     ObjMesh &mesh = _elements.last();
     for (int i = 0; i < v.size(); ++i) {
         mesh.addVertex(v[i], vn[i]);
@@ -61,16 +61,28 @@ void ObjScene::addPolygon(QList<QVector3D> v)
 {
     QVector3D vn = QVector3D::normal(v[0], v[1], v[2]);
 
-    _elements.append(ObjMesh(GL_POLYGON));
+    _elements.append(ObjMesh(GL_POLYGON, _currentObject, _currentGroup));
     ObjMesh &mesh = _elements.last();
     for (int i = 0; i < v.size(); ++i) {
         mesh.addVertex(v[i], vn);
     }
 }
 
+void ObjScene::setCurrentObject(const QString &name)
+{
+    _currentObject = name;
+}
+
+void ObjScene::setCurrentGroup(const QString &name)
+{
+    _currentGroup = name;
+}
+
 void ObjScene::clear()
 {
     _elements.clear();
+    _currentObject.clear();
+    _currentGroup.clear();
 }
 
 void ObjScene::initializeGL(const QGLContext *context)
@@ -92,6 +104,10 @@ void ObjScene::initializeGL(const QGLContext *context)
     hardnessLocation = _program->uniformLocation("hardness");
     lightLocation = _program->uniformLocation("light");
 
+    setProjection(QMatrix4x4());
+    setView(QMatrix4x4());
+    setModel(QMatrix4x4());
+
     // tout mettre dans le VBO
     _vbo.create();
     _vbo.bind();
@@ -109,28 +125,32 @@ void ObjScene::initializeGL(const QGLContext *context)
     _vbo.release();
 }
 
-void ObjScene::drawGL()
+void ObjScene::drawGL(const QString &object, const QString &group)
 {
     _program->bind();
-    _vbo.bind();
-
     _program->enableAttributeArray(vertexLocation);
     _program->enableAttributeArray(normalLocation);
+
+    Q_ASSERT(_vbo.bind());
     _program->setAttributeBuffer(vertexLocation, GL_FLOAT, 0, 3, sizeof (QVector3D) * 2);
     _program->setAttributeBuffer(normalLocation, GL_FLOAT, sizeof (QVector3D), 3, sizeof (QVector3D) * 2);
 
     int first = 0;
-//    qDebug() << "start drawing";
+    //    qDebug() << "start drawing";
     for (int i = 0; i < _elements.size(); ++i) {
-//        qDebug() << "darw #" << i+1 << " mode(" << (_elements[i].mode() == GL_TRIANGLES ? "GL_TRIANGLES" : _elements[i].mode() == GL_QUADS ? "GL_QUADS" : "GL_POLYGON")  << ")" << first << _elements[i]._vertices.size() / 2;
-        glDrawArrays(_elements[i].mode(), first, _elements[i]._vertices.size() / 2);
-        first += _elements[i]._vertices.size() / 2;
+        if (object.isEmpty() || _elements[i]._objectName == object) {
+            if (group.isEmpty() || _elements[i]._groupName == group) {
+                //        qDebug() << "darw #" << i+1 << " mode(" << (_elements[i].mode() == GL_TRIANGLES ? "GL_TRIANGLES" : _elements[i].mode() == GL_QUADS ? "GL_QUADS" : "GL_POLYGON")  << ")" << first << _elements[i]._vertices.size() / 2;
+                glDrawArrays(_elements[i].mode(), first, _elements[i]._vertices.size() / 2);
+                first += _elements[i]._vertices.size() / 2;
+            }
+        }
     }
+
+    _vbo.release();
 
     _program->disableAttributeArray(vertexLocation);
     _program->disableAttributeArray(normalLocation);
-
-    _vbo.release();
     _program->release();
 }
 
