@@ -9,7 +9,11 @@ LinePath::LinePath() :
 void LinePath::addPoint(const QVector3D &p)
 {
     if (_size < MAXSIZE && !_vbolist.isEmpty()) {
-        _vbolist.last().write(_size, &p, sizeof (QVector3D));
+        QGLBuffer &vbo = _vbolist.last();
+
+        Q_ASSERT(vbo.bind());
+        vbo.write(_size, &p, sizeof (QVector3D));
+        vbo.release();
         _last = p;
         _size += sizeof (QVector3D);
     } else {
@@ -17,9 +21,11 @@ void LinePath::addPoint(const QVector3D &p)
 
         _vbolist << QGLBuffer(QGLBuffer::VertexBuffer);
         QGLBuffer &vbo = _vbolist.last();
+
         vbo.setUsagePattern(QGLBuffer::DynamicDraw);
         Q_ASSERT(vbo.create());
         vbo.allocate(MAXSIZE);
+        Q_ASSERT(vbo.bind());
 
         if (_vbolist.size() > 1) {
             vbo.write(_size, &_last, sizeof (QVector3D));
@@ -28,6 +34,8 @@ void LinePath::addPoint(const QVector3D &p)
 
         vbo.write(_size, &p, sizeof (QVector3D));
         _size += sizeof (QVector3D);
+
+        vbo.release();
     }
 
     qDebug() << _vbolist.size() << _size;

@@ -72,7 +72,6 @@ void GLWidget::paintGL()
     _scene.drawGL();
 
     QVector3D p = m.map(QVector3D(0.0, 0.0, 0.0));
-    qDebug() << p;
     _linepath.addPoint(p);
 }
 

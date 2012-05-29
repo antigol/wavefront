@@ -128,10 +128,10 @@ void ObjScene::initializeGL(const QGLContext *context)
 void ObjScene::drawGL(const QString &object, const QString &group)
 {
     _program->bind();
-    _vbo.bind();
-
     _program->enableAttributeArray(vertexLocation);
     _program->enableAttributeArray(normalLocation);
+
+    Q_ASSERT(_vbo.bind());
     _program->setAttributeBuffer(vertexLocation, GL_FLOAT, 0, 3, sizeof (QVector3D) * 2);
     _program->setAttributeBuffer(normalLocation, GL_FLOAT, sizeof (QVector3D), 3, sizeof (QVector3D) * 2);
 
@@ -147,10 +147,10 @@ void ObjScene::drawGL(const QString &object, const QString &group)
         }
     }
 
+    _vbo.release();
+
     _program->disableAttributeArray(vertexLocation);
     _program->disableAttributeArray(normalLocation);
-
-    _vbo.release();
     _program->release();
 }
 
