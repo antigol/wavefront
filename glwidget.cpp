@@ -12,13 +12,14 @@ GLWidget::GLWidget(QWidget *parent) :
 //    parser.parse("../obj/icosahedron.obj");
 //    parser.parse("../obj/untitled.obj");
 //    parser.parse("../obj/monkey.obj");
+    parser.parse("../wavefront/suzanne.obj");
     parser.parse("../wavefront/stem.obj");
 //    parser.parse("../obj/torus.obj");
 
-    _pendulum.setParameters(1.0, 1.0, 1.0, 1.0, 0.0, 0.0);
-
     _oldTime = 0.0;
     _time.start();
+    _pendulum.setParameters(1.0, 1.0, 1.0, 1.0, 0.0, 0.0);
+
 
     startTimer(0);
 }
@@ -27,6 +28,9 @@ void GLWidget::initializeGL()
 {
     _scene.initializeGL(context());
     _scene.setLight(QVector3D(0, 1, 1).normalized());
+
+    _linepath.initializeGL(context());
+    _linepath.setColor(Qt::red, Qt::white, 0.1);
 }
 
 void GLWidget::resizeGL(int w, int h)
@@ -35,6 +39,7 @@ void GLWidget::resizeGL(int w, int h)
     QMatrix4x4 p;
     p.perspective(50.0, qreal(w)/qreal(h?h:1), 0.1, 1000.0);
     _scene.setProjection(p);
+    _linepath.setProjection(p);
 }
 
 void GLWidget::paintGL()
@@ -48,7 +53,9 @@ void GLWidget::paintGL()
     m.rotate(_b, 1, 0, 0);
     m.rotate(_a, 0, 1, 0);
     _scene.setView(m);
+    _linepath.setView(m);
 
+    _linepath.drawGL();
 
     m.setToIdentity();
     m.scale(_pendulum.l1(), 1.0, 1.0);
@@ -63,6 +70,10 @@ void GLWidget::paintGL()
     _scene.setModel(m);
     _scene.setColor(QColor(Qt::blue).darker(), QColor(Qt::cyan).lighter(), Qt::white, 10.0);
     _scene.drawGL();
+
+    QVector3D p = m.map(QVector3D(0.0, 0.0, 0.0));
+    qDebug() << p;
+    _linepath.addPoint(p);
 }
 
 #include <QMouseEvent>

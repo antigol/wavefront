@@ -104,6 +104,10 @@ void ObjScene::initializeGL(const QGLContext *context)
     hardnessLocation = _program->uniformLocation("hardness");
     lightLocation = _program->uniformLocation("light");
 
+    setProjection(QMatrix4x4());
+    setView(QMatrix4x4());
+    setModel(QMatrix4x4());
+
     // tout mettre dans le VBO
     _vbo.create();
     _vbo.bind();

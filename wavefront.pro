@@ -28,7 +28,9 @@ HEADERS  += \
 
 OTHER_FILES += \
     objshader.frag \
-    objshader.vert
+    objshader.vert \
+    linepath.vert \
+    linepath.frag
 
 RESOURCES += \
     data.qrc

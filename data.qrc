@@ -2,5 +2,7 @@
     <qresource prefix="/files">
         <file>objshader.frag</file>
         <file>objshader.vert</file>
+        <file>linepath.frag</file>
+        <file>linepath.vert</file>
     </qresource>
 </RCC>

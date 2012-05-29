@@ -5,6 +5,7 @@
 #include <QMatrix4x4>
 #include <QTime>
 #include "objscene.h"
+#include "linepath.h"
 #include "doublependulum.h"
 
 class GLWidget : public QGLWidget
@@ -28,6 +29,7 @@ private:
     float _z;
 
     ObjScene _scene;
+    LinePath _linepath;
 
     QTime _time;
     double _oldTime;
