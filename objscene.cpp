@@ -139,7 +139,7 @@ void ObjScene::drawGL(const QString &object, const QString &group)
     _program->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
     _program->enableAttributeArray(PROGRAM_NORMAL_ATTRIBUTE);
 
-    Q_ASSERT(_vbo.bind());
+    _vbo.bind();
     _program->setAttributeBuffer(PROGRAM_VERTEX_ATTRIBUTE, GL_FLOAT, 0, 3, sizeof (QVector3D) * 2);
     _program->setAttributeBuffer(PROGRAM_NORMAL_ATTRIBUTE, GL_FLOAT, sizeof (QVector3D), 3, sizeof (QVector3D) * 2);
 
