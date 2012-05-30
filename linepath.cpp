@@ -8,6 +8,9 @@ LinePath::LinePath()
 void LinePath::addPoint(const QVector3D &p)
 {
     _vertices.append(p);
+    while (_vertices.size() > 200) {
+        _vertices.pop_front();
+    }
 }
 
 void LinePath::clear()
@@ -41,22 +44,8 @@ void LinePath::drawGL()
     _program->bind();
     _program->enableAttributeArray(_vertexLocation);
 
-    ///!!  TODO : faire du vbo !
-    glBegin(GL_LINE_STRIP);
-    for (int i = 0; i < _vertices.size(); ++i) {
-        glVertex3f(_vertices[i].x(), _vertices[i].y(), _vertices[i].z());
-    }
-    glEnd();
-
-//    QGLBuffer vbo(QGLBuffer::VertexBuffer);
-//    vbo.create();
-//    vbo.allocate(_vertices.constData(), _vertices.size() * sizeof (QVector3D));
-//    vbo.bind();
-
-//    _program->setAttributeBuffer(_vertexLocation, GL_FLOAT, 0, 3, 0);
-//    glDrawArrays(GL_LINE_STRIP, 0, _vertices.size());
-
-//    vbo.release();
+    _program->setAttributeArray(_vertexLocation, _vertices.constData());
+    glDrawArrays(GL_LINE_STRIP, 0, _vertices.size());
 
     _program->disableAttributeArray(_vertexLocation);
     _program->release();

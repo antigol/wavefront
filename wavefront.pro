@@ -30,7 +30,8 @@ OTHER_FILES += \
     objshader.frag \
     objshader.vert \
     linepath.vert \
-    linepath.frag
+    linepath.frag \
+    stem.obj
 
 RESOURCES += \
     data.qrc

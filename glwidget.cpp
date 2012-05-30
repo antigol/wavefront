@@ -46,6 +46,7 @@ void GLWidget::resizeGL(int w, int h)
 void GLWidget::paintGL()
 {
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -132,7 +133,7 @@ void GLWidget::wheelEvent(QWheelEvent *e)
 
 void GLWidget::timerEvent(QTimerEvent *)
 {
-    double time = double(_time.elapsed()) / 1000.0;
+    double time = 0.5 * double(_time.elapsed()) / 1000.0;
     double dt = time - _oldTime;
     _oldTime = time;
 
