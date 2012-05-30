@@ -7,18 +7,11 @@ GLWidget::GLWidget(QWidget *parent) :
     QGLWidget(parent), _a(0.0), _b(0.0), _z(-55.0)
 {
     ObjParser parser(&_scene);
-    //    parser.parse("../obj/cube.obj");
-//    parser.parse("../obj/lamp.obj");
-//    parser.parse("../obj/icosahedron.obj");
-//    parser.parse("../obj/untitled.obj");
-//    parser.parse("../obj/monkey.obj");
-//    parser.parse("../wavefront/suzanne.obj");
     parser.parse(":/files/stem.obj");
-//    parser.parse("../obj/torus.obj");
 
     _oldTime = 0.0;
     _time.start();
-    _pendulum.setParameters(1.0, 1.0, 1.0, 1.0, 75.0, 80.0);
+    _pendulum.setParameters(2.0, 1.0, 1.0, 1.0, 75.0, 80.0);
     _pendulum.reset();
 
 
@@ -28,7 +21,7 @@ GLWidget::GLWidget(QWidget *parent) :
 void GLWidget::initializeGL()
 {
     _scene.initializeGL(context());
-    _scene.setLight(QVector3D(1, 1, -1).normalized());
+    _scene.setLight(QVector3D(1, 2, 1).normalized());
 
     _linepath.initializeGL(context());
     _linepath.setColor(Qt::red, Qt::white, 10.0);
@@ -67,12 +60,12 @@ void GLWidget::paintGL()
     _scene.drawGL("basis");
 
     m.translate(0.0, 0.0, -5.0);
-    m.scale(1.0, 1.0, -1.0);
+    m.scale(-1.0, 1.0, -1.0);
     _scene.setModel(m);
     _scene.drawGL("basis");
 
     m.translate(0.0, 0.0, -5.0);
-    m.scale(1.0, 1.0, -1.0);
+    m.scale(-1.0, 1.0, -1.0);
 
 
     m.rotate(_pendulum.a1(), 0.0, 0.0, 1.0);
@@ -84,11 +77,11 @@ void GLWidget::paintGL()
     _scene.drawGL("stem1");
 
     m.translate(0.0, 0.0, -3.0);
-    m.scale(1.0, 1.0, -1.0);
+    m.scale(1.0, -1.0, -1.0);
     _scene.setModel(m);
     _scene.drawGL("stem1");
     m.translate(0.0, 0.0, -3.0);
-    m.scale(1.0, 1.0, -1.0);
+    m.scale(1.0, -1.0, -1.0);
 
 
     m.translate(10.0, 0.0, 0.0);
@@ -133,7 +126,7 @@ void GLWidget::wheelEvent(QWheelEvent *e)
 
 void GLWidget::timerEvent(QTimerEvent *)
 {
-    double time = 0.5 * double(_time.elapsed()) / 1000.0;
+    double time = 1.0 * double(_time.elapsed()) / 1000.0;
     double dt = time - _oldTime;
     _oldTime = time;
 

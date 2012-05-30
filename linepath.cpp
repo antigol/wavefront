@@ -1,5 +1,5 @@
 #include "linepath.h"
-#define MAXSIZE int(1024 * sizeof (QVector3D))
+#define MAXCOUNT 1024
 
 LinePath::LinePath()
 {
@@ -7,15 +7,26 @@ LinePath::LinePath()
 
 void LinePath::addPoint(const QVector3D &p)
 {
-    _vertices.append(p);
-    while (_vertices.size() > 200) {
-        _vertices.pop_front();
+    _vertices << p;
+
+    if (_vertices.size() >= MAXCOUNT) {
+        QGLBuffer vbo;
+        vbo.create();
+        vbo.bind();
+        vbo.allocate(_vertices.constData(), MAXCOUNT * sizeof (QVector3D));
+        vbo.release();
+
+        _buffers << vbo;
+        _vertices.clear();
     }
+
+    qDebug() << _vertices.size() << _buffers.size();
 }
 
 void LinePath::clear()
 {
     _vertices.clear();
+    _buffers.clear();
 }
 
 void LinePath::initializeGL(const QGLContext *context)
@@ -43,6 +54,13 @@ void LinePath::drawGL()
 {
     _program->bind();
     _program->enableAttributeArray(_vertexLocation);
+
+    for (int i = 0; i < _buffers.size(); ++i) {
+        _buffers[i].bind();
+        _program->setAttributeBuffer(_vertexLocation, GL_FLOAT, 0, 3);
+        glDrawArrays(GL_LINE_STRIP, 0, MAXCOUNT);
+        _buffers[i].release();
+    }
 
     _program->setAttributeArray(_vertexLocation, _vertices.constData());
     glDrawArrays(GL_LINE_STRIP, 0, _vertices.size());

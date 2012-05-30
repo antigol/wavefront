@@ -25,6 +25,7 @@ public:
 
 public:
     QVector<QVector3D> _vertices;
+    QList<QGLBuffer> _buffers;
 
     QGLShaderProgram *_program;
 
