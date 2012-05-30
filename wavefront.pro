@@ -16,7 +16,8 @@ SOURCES += main.cpp\
     objscene.cpp \
     glwidget.cpp \
     doublependulum.cpp \
-    linepath.cpp
+    linepath.cpp \
+    skybox.cpp
 
 HEADERS  += \
     objparser.h \
@@ -24,14 +25,16 @@ HEADERS  += \
     objscene.h \
     glwidget.h \
     doublependulum.h \
-    linepath.h
+    linepath.h \
+    skybox.h
 
 OTHER_FILES += \
     objshader.frag \
     objshader.vert \
     linepath.vert \
     linepath.frag \
-    stem.obj
+    skybox.vert \
+    skybox.frag
 
 RESOURCES += \
     data.qrc

@@ -19,8 +19,6 @@ void LinePath::addPoint(const QVector3D &p)
         _buffers << vbo;
         _vertices.clear();
     }
-
-    qDebug() << _vertices.size() << _buffers.size();
 }
 
 void LinePath::clear()

@@ -1,5 +1,5 @@
 #version 130
-in vec3 n; // in model coordinates
+in vec3 n; // in view coordinates
 in vec3 p; // in view coordinates
 
 uniform mat4 matrixv; // view (camera)
@@ -14,11 +14,14 @@ out vec4 color;
 
 void main(void)
 {
-    float dfactor = clamp(dot(light, normalize(n)), 0.0, 1.0);
+    vec3 nn = normalize(n);
+    vec3 pp = normalize(p);
+    vec3 l = mat3(matrixv) * light;
 
-    vec3 e = normalize(p);
-    vec3 i = e - 2.0 * n * dot(e, n); // reflection
-    float sfactor = pow(clamp(dot(mat3(matrixv) * light, i), 0.0, 1.0), hardness);
+    float dfactor = clamp(dot(l, nn), 0.0, 1.0);
+
+    vec3 i = pp - 2.0 * nn * dot(pp, nn); // reflection
+    float sfactor = pow(clamp(dot(l, i), 0.0, 1.0), hardness);
 
     color = ambiant + dfactor * diffuse + sfactor * specular;
 }

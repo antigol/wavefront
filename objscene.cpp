@@ -1,4 +1,6 @@
 #include "objscene.h"
+#define PROGRAM_VERTEX_ATTRIBUTE 0
+#define PROGRAM_NORMAL_ATTRIBUTE 1
 
 ObjScene::ObjScene(QObject *parent) :
     QObject(parent),
@@ -96,11 +98,11 @@ void ObjScene::initializeGL(const QGLContext *context)
     _program = new QGLShaderProgram(context, this);
     _program->addShaderFromSourceFile(QGLShader::Vertex, ":/files/objshader.vert");
     _program->addShaderFromSourceFile(QGLShader::Fragment, ":/files/objshader.frag");
+    _program->bindAttributeLocation("vertex", PROGRAM_VERTEX_ATTRIBUTE);
+    _program->bindAttributeLocation("normal", PROGRAM_NORMAL_ATTRIBUTE);
     if (!_program->link())
         qDebug() << _program->log();
 
-    vertexLocation = _program->attributeLocation("vertex");
-    normalLocation = _program->attributeLocation("normal");
     modelLocation = _program->uniformLocation("matrixm");
     viewLocation = _program->uniformLocation("matrixv");
     projectionLocation = _program->uniformLocation("matrixp");
@@ -134,29 +136,29 @@ void ObjScene::initializeGL(const QGLContext *context)
 void ObjScene::drawGL(const QString &object, const QString &group)
 {
     _program->bind();
-    _program->enableAttributeArray(vertexLocation);
-    _program->enableAttributeArray(normalLocation);
+    _program->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+    _program->enableAttributeArray(PROGRAM_NORMAL_ATTRIBUTE);
 
     Q_ASSERT(_vbo.bind());
-    _program->setAttributeBuffer(vertexLocation, GL_FLOAT, 0, 3, sizeof (QVector3D) * 2);
-    _program->setAttributeBuffer(normalLocation, GL_FLOAT, sizeof (QVector3D), 3, sizeof (QVector3D) * 2);
+    _program->setAttributeBuffer(PROGRAM_VERTEX_ATTRIBUTE, GL_FLOAT, 0, 3, sizeof (QVector3D) * 2);
+    _program->setAttributeBuffer(PROGRAM_NORMAL_ATTRIBUTE, GL_FLOAT, sizeof (QVector3D), 3, sizeof (QVector3D) * 2);
 
     int first = 0;
     //    qDebug() << "start drawing";
     for (int i = 0; i < _elements.size(); ++i) {
         if (object.isEmpty() || _elements[i]._objectName.startsWith(object+"_")) {
             if (group.isEmpty() || _elements[i]._groupName == group) {
-//                qDebug() << "darw #" << i+1 << " mode(" << (_elements[i].mode() == GL_TRIANGLES ? "GL_TRIANGLES" : _elements[i].mode() == GL_QUADS ? "GL_QUADS" : "GL_POLYGON")  << ")" << first << _elements[i]._vertices.size() / 2;
-                glDrawArrays(_elements[i].mode(), first, _elements[i]._vertices.size() / 2);
+//                qDebug() << "darw #" << i+1 << " mode(" << (_elements[i].mode() == GL_TRIANGLES ? "GL_TRIANGLES" : _elements[i].mode() == GL_QUADS ? "GL_QUADS" : "GL_POLYGON")  << ")" << first << _elements[i].count();
+                glDrawArrays(_elements[i].mode(), first, _elements[i].count());
             }
         }
-        first += _elements[i]._vertices.size() / 2;
+        first += _elements[i].count();
     }
 
     _vbo.release();
 
-    _program->disableAttributeArray(vertexLocation);
-    _program->disableAttributeArray(normalLocation);
+    _program->disableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+    _program->disableAttributeArray(PROGRAM_NORMAL_ATTRIBUTE);
     _program->release();
 }
 

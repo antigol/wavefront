@@ -10,6 +10,11 @@ GLenum ObjMesh::mode() const
     return _mode;
 }
 
+int ObjMesh::count() const
+{
+    return _vertices.size() / 2;
+}
+
 void ObjMesh::addVertex(const QVector3D &v, const QVector3D &vn)
 {
     _vertices << v << vn;

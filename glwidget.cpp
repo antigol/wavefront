@@ -18,13 +18,21 @@ GLWidget::GLWidget(QWidget *parent) :
     startTimer(0);
 }
 
+GLWidget::~GLWidget()
+{
+    deleteTexture(_texture);
+}
+
 void GLWidget::initializeGL()
 {
     _scene.initializeGL(context());
-    _scene.setLight(QVector3D(1, 2, 1).normalized());
+    _scene.setLight(QVector3D(1.0, 0.5, -1.0).normalized());
 
     _linepath.initializeGL(context());
     _linepath.setColor(Qt::red, Qt::white, 10.0);
+
+    _skybox.initialiseGL(context());
+    _texture = bindTexture(QImage(":/files/skybox2.jpg"));
 }
 
 void GLWidget::resizeGL(int w, int h)
@@ -34,12 +42,14 @@ void GLWidget::resizeGL(int w, int h)
     p.perspective(50.0, qreal(w)/qreal(h?h:1), 0.1, 1000.0);
     _scene.setProjection(p);
     _linepath.setProjection(p);
+    _skybox.setProjection(p);
 }
 
 void GLWidget::paintGL()
 {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
+    glEnable(GL_TEXTURE_2D);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -49,6 +59,9 @@ void GLWidget::paintGL()
     m.rotate(_a, 0, 1, 0);
     _scene.setView(m);
     _linepath.setView(m);
+    _skybox.setView(m);
+
+    _skybox.drawGL(_texture);
 
     _linepath.drawGL();
 
@@ -56,7 +69,7 @@ void GLWidget::paintGL()
     m.translate(0.0, 0.0, 2.5);
 
     _scene.setModel(m);
-    _scene.setColor(QColor(Qt::gray).darker(), Qt::gray, Qt::white, 50.0);
+    _scene.setColor(QColor(Qt::gray).darker(800), Qt::gray, Qt::white, 50.0);
     _scene.drawGL("basis");
 
     m.translate(0.0, 0.0, -5.0);
@@ -73,7 +86,7 @@ void GLWidget::paintGL()
 
     m.translate(0.0, 0.0, -1.0);
     _scene.setModel(m);
-    _scene.setColor(QColor(Qt::red).darker(), QColor(Qt::yellow).lighter(), Qt::white, 10.0);
+    _scene.setColor(QColor(Qt::red).darker(400), QColor(Qt::yellow).lighter(), Qt::white, 10.0);
     _scene.drawGL("stem1");
 
     m.translate(0.0, 0.0, -3.0);
@@ -92,7 +105,7 @@ void GLWidget::paintGL()
     m.scale(_pendulum.l2(), 1.0, 1.0);
     m.translate(0.0, 0.0, -1.5);
     _scene.setModel(m);
-    _scene.setColor(QColor(Qt::blue).darker(), QColor(Qt::cyan).lighter(), Qt::white, 10.0);
+    _scene.setColor(QColor(Qt::blue).darker(400), QColor(Qt::cyan).lighter(), Qt::white, 10.0);
     _scene.drawGL("stem2");
 
     m.translate(10.0, 0.0, 0.0);

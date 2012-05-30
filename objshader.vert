@@ -11,7 +11,7 @@ out vec3 p;
 
 void main(void)
 {
-    n = mat3(matrixm) * normal;
+    n = mat3(matrixv) * mat3(matrixm) * normal;
 
     vec4 vmp = matrixv * matrixm * vec4(vertex, 1.0);
     p = vec3(vmp);

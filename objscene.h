@@ -46,8 +46,6 @@ private:
     QGLShaderProgram *_program;
     QGLBuffer _vbo;
 
-    int vertexLocation;
-    int normalLocation;
     int projectionLocation;
     int viewLocation;
     int modelLocation;

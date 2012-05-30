@@ -6,6 +6,7 @@
 #include <QTime>
 #include "objscene.h"
 #include "linepath.h"
+#include "skybox.h"
 #include "doublependulum.h"
 
 class GLWidget : public QGLWidget
@@ -13,6 +14,7 @@ class GLWidget : public QGLWidget
     Q_OBJECT
 public:
     explicit GLWidget(QWidget *parent = 0);
+    ~GLWidget();
     
 private:
     void initializeGL();
@@ -31,6 +33,8 @@ private:
 
     ObjScene _scene;
     LinePath _linepath;
+    SkyBox _skybox;
+    GLuint _texture;
 
     QTime _time;
     double _oldTime;
