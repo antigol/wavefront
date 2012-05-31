@@ -5,15 +5,15 @@ LinePath::LinePath()
 {
 }
 
-void LinePath::addPoint(const QVector3D &p)
+void LinePath::addPoint(const QVector3D &p, float color)
 {
-    _vertices << p;
+    _vertices << QVector4D(p, color);
 
     if (_vertices.size() >= MAXCOUNT) {
         QGLBuffer vbo;
         vbo.create();
         vbo.bind();
-        vbo.allocate(_vertices.constData(), MAXCOUNT * sizeof (QVector3D));
+        vbo.allocate(_vertices.constData(), MAXCOUNT * sizeof (QVector4D));
         vbo.release();
 
         _buffers << vbo;
@@ -55,7 +55,7 @@ void LinePath::drawGL()
 
     for (int i = 0; i < _buffers.size(); ++i) {
         _buffers[i].bind();
-        _program->setAttributeBuffer(_vertexLocation, GL_FLOAT, 0, 3);
+        _program->setAttributeBuffer(_vertexLocation, GL_FLOAT, 0, 4);
         glDrawArrays(GL_LINE_STRIP, 0, MAXCOUNT);
         _buffers[i].release();
     }

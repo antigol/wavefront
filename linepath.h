@@ -12,7 +12,7 @@ class LinePath : public QObject
 public:
     LinePath();
 
-    void addPoint(const QVector3D &p);
+    void addPoint(const QVector3D &p, float color = 0.0);
     void clear();
 
     void initializeGL(const QGLContext *context);
@@ -24,7 +24,7 @@ public:
     void setColor(const QColor &color1, const QColor &color2, GLfloat step);
 
 public:
-    QVector<QVector3D> _vertices;
+    QVector<QVector4D> _vertices;
     QList<QGLBuffer> _buffers;
 
     QGLShaderProgram *_program;

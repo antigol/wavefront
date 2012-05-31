@@ -10,11 +10,17 @@ public:
     void reset();
 
     void move(double dt);
+    double kinetic() const;
+    double potential() const;
 
     double a1() const;
     double a2() const;
+    double b1() const;
+    double b2() const;
     double l1() const;
     double l2() const;
+    double m1() const;
+    double m2() const;
 
 private:
     double _a01, _a02;

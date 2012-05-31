@@ -110,7 +110,8 @@ void GLWidget::paintGL()
 
     m.translate(10.0, 0.0, 0.0);
     QVector3D p = m.map(QVector3D(0.0, 0.0, 0.0));
-    _linepath.addPoint(p);
+    _linepath.addPoint(p, _pendulum.kinetic() / 100.0);
+    qDebug() << "kinetic:" << _pendulum.kinetic() << "potential:" << _pendulum.potential() << "total:" << _pendulum.kinetic() + _pendulum.potential();
 }
 
 #include <QMouseEvent>
