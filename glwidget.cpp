@@ -4,7 +4,8 @@
 #include <cmath>
 
 GLWidget::GLWidget(QWidget *parent) :
-    QGLWidget(parent), _a(0.0), _b(0.0), _z(-55.0)
+    QGLWidget(parent), _a(0.0), _b(0.0), _z(-55.0),
+    _pendulum(10000)
 {
     ObjParser parser(&_scene);
     parser.parse(":/files/stem.obj");
@@ -29,7 +30,7 @@ void GLWidget::initializeGL()
     _scene.setLight(QVector3D(1.0, 0.5, -1.0).normalized());
 
     _linepath.initializeGL(context());
-    _linepath.setColor(Qt::red, Qt::white, 10.0);
+    _linepath.setColor(QColor(0, 0, 0, 50), QColor(255, 255, 255, 50));
 
     _skybox.initialiseGL(context());
     _texture = bindTexture(QImage(":/files/skybox2.jpg"));
@@ -48,8 +49,12 @@ void GLWidget::resizeGL(int w, int h)
 void GLWidget::paintGL()
 {
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_CULL_FACE); // cull face
+
+    glEnable(GL_TEXTURE_2D); // texture
+
+    glEnable(GL_BLEND); // alpha
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -144,10 +149,14 @@ void GLWidget::timerEvent(QTimerEvent *)
     double dt = time - _oldTime;
     _oldTime = time;
 
+//    QTime tt;
+//    tt.start();
     if (dt != 0.0) {
-        _pendulum.move(dt);
         updateGL();
+        _pendulum.move(dt);
+//        _pendulum.moveAsynchronous(dt);
     }
+//    qDebug() << tt.elapsed();
 }
 
 #include <QKeyEvent>

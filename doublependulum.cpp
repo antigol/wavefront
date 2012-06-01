@@ -51,6 +51,12 @@ void DoublePendulum::move(double dt)
     }
 }
 
+void DoublePendulum::moveAsynchronous(double dt)
+{
+    _dt = dt;
+    start();
+}
+
 double DoublePendulum::kinetic() const
 {
     double r1 = 1.0 / 6.0 * _m1 * _l1*_l1 * _b1*_b1;
@@ -108,4 +114,9 @@ double DoublePendulum::m1() const
 double DoublePendulum::m2() const
 {
     return _m2;
+}
+
+void DoublePendulum::run()
+{
+    move(_dt);
 }

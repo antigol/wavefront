@@ -1,7 +1,9 @@
 #ifndef DOUBLEPENDULUM_H
 #define DOUBLEPENDULUM_H
 
-class DoublePendulum
+#include <QThread>
+
+class DoublePendulum : public QThread
 {
 public:
     DoublePendulum(int n = 1000);
@@ -10,6 +12,7 @@ public:
     void reset();
 
     void move(double dt);
+    void moveAsynchronous(double dt);
     double kinetic() const;
     double potential() const;
 
@@ -23,6 +26,7 @@ public:
     double m2() const;
 
 private:
+    void run();
     double _a01, _a02;
 
     double _a1, _b1;
@@ -34,6 +38,7 @@ private:
     double _l2;
 
     int _n;
+    double _dt;
 };
 
 #endif // DOUBLEPENDULUM_H

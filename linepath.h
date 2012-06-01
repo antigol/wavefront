@@ -21,7 +21,7 @@ public:
     void setModel(const QMatrix4x4 &m);
     void setView(const QMatrix4x4 &v);
     void setProjection(const QMatrix4x4 &p);
-    void setColor(const QColor &color1, const QColor &color2, GLfloat step);
+    void setColor(const QColor &color1, const QColor &color2);
 
 public:
     QVector<QVector4D> _vertices;
@@ -29,13 +29,11 @@ public:
 
     QGLShaderProgram *_program;
 
-    int _vertexLocation;
     int _modelLocation;
     int _viewLocation;
     int _projectionLocation;
     int _color1Location;
     int _color2Location;
-    int _stepLocation;
 };
 
 #endif // LINEPATH_H
