@@ -7,7 +7,6 @@
         <file>stem.obj</file>
         <file>skybox.frag</file>
         <file>skybox.vert</file>
-        <file>skybox.jpg</file>
         <file>skybox2.jpg</file>
         <file>skybox3.jpg</file>
     </qresource>

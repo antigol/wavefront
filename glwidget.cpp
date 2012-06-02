@@ -5,7 +5,7 @@
 
 GLWidget::GLWidget(QWidget *parent) :
     QGLWidget(parent), _a(0.0), _b(0.0), _z(-55.0),
-    _pendulum(10000)
+    _pendulum(2000)
 {
     ObjParser parser(&_scene);
     parser.parse(":/files/stem.obj");

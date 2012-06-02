@@ -1,6 +1,6 @@
 #include "linepath.h"
 #define PROGRAM_VERTEX_ATTRIBUTE 0
-#define MAXCOUNT 1024
+#define MAXCOUNT 4098
 
 LinePath::LinePath()
 {
