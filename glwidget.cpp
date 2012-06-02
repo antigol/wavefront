@@ -11,12 +11,8 @@ GLWidget::GLWidget(QWidget *parent) :
     parser.parse(":/files/stem.obj");
 
     _oldTime = 0.0;
-    _time.start();
     _pendulum.setParameters(2.0, 1.0, 1.0, 1.0, 75.0, 80.0);
     _pendulum.reset();
-
-
-    startTimer(0);
 }
 
 GLWidget::~GLWidget()
@@ -34,6 +30,9 @@ void GLWidget::initializeGL()
 
     _skybox.initialiseGL(context());
     _texture = bindTexture(QImage(":/files/skybox2.jpg"));
+
+    _time.start();
+    startTimer(0);
 }
 
 void GLWidget::resizeGL(int w, int h)
