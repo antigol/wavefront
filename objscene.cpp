@@ -166,7 +166,6 @@ void ObjScene::setModel(const QMatrix4x4 &m)
 {
     _program->bind();
     _program->setUniformValue(_modelLocation, m);
-    _program->setUniformValue(_modelNormalLocation, m.inverted().transposed());
     _program->release();
 }
 
