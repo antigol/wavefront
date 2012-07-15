@@ -19,6 +19,7 @@ private:
 
     int _projectionLocation;
     int _viewLocation;
+    GLuint _texture;
 };
 
 #endif // SKYBOX_H

@@ -46,15 +46,15 @@ private:
     QGLShaderProgram *_program;
     QGLBuffer _vbo;
 
-    int projectionLocation;
-    int viewLocation;
-    int modelLocation;
+    int _projectionLocation;
+    int _viewLocation;
+    int _modelLocation;
 
-    int ambiantLocation;
-    int diffuseLocation;
-    int specularLocation;
-    int hardnessLocation;
-    int lightLocation;
+    int _ambiantLocation;
+    int _diffuseLocation;
+    int _specularLocation;
+    int _hardnessLocation;
+    int _lightLocation;
 };
 
 #endif // OBJSCENE_H

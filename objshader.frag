@@ -20,7 +20,7 @@ void main(void)
 
     float dfactor = clamp(dot(l, nn), 0.0, 1.0);
 
-    vec3 i = pp - 2.0 * nn * dot(pp, nn); // reflection
+    vec3 i = reflect(pp, nn);
     float sfactor = pow(clamp(dot(l, i), 0.0, 1.0), hardness);
 
     color = ambiant + dfactor * diffuse + sfactor * specular;

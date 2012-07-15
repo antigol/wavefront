@@ -4,7 +4,7 @@
 #include <cmath>
 
 GLWidget::GLWidget(QWidget *parent) :
-    QGLWidget(parent), _a(0.0), _b(0.0), _z(-55.0),
+    QGLWidget(parent), _a(-140.0), _b(20.0), _z(-55.0),
     _pendulum(2000)
 {
     ObjParser parser(&_scene);
