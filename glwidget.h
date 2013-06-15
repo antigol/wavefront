@@ -24,7 +24,7 @@ private:
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
     void wheelEvent(QWheelEvent *e);
-    void timerEvent(QTimerEvent *);
+    void timerEvent(QTimerEvent * e);
     void keyPressEvent(QKeyEvent *e);
     
     QPointF _oldmouseposition;
@@ -40,6 +40,9 @@ private:
     double _oldTime;
 
     DoublePendulum _pendulum;
+
+    int _timerGL;
+    int _timerDP;
 };
 
 #endif // GLWIDGET_H

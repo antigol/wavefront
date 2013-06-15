@@ -1,11 +1,12 @@
 #include "glwidget.h"
 #include "objparser.h"
 #include <QDebug>
+#include <QTimerEvent>
 #include <cmath>
 
 GLWidget::GLWidget(QWidget *parent) :
     QGLWidget(parent), _a(-140.0), _b(20.0), _z(-55.0),
-    _pendulum(2000)
+    _pendulum(10000)
 {
     ObjParser parser(&_scene);
     parser.parse(":/files/stem.obj");
@@ -32,7 +33,8 @@ void GLWidget::initializeGL()
     _texture = bindTexture(QImage(":/files/skybox2.jpg"));
 
     _time.start();
-    startTimer(0);
+    _timerGL = startTimer(20);
+    _timerDP = startTimer(0);
 }
 
 void GLWidget::resizeGL(int w, int h)
@@ -121,13 +123,13 @@ void GLWidget::paintGL()
 #include <QMouseEvent>
 void GLWidget::mousePressEvent(QMouseEvent *e)
 {
-    _oldmouseposition = e->posF();
+    _oldmouseposition = e->pos();
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *e)
 {
-    QPointF d = e->posF() - _oldmouseposition;
-    _oldmouseposition = e->posF();
+    QPointF d = e->pos() - _oldmouseposition;
+    _oldmouseposition = e->pos();
 
     if (e->buttons() & Qt::LeftButton) {
         _a += d.x() * 0.5;
@@ -142,20 +144,22 @@ void GLWidget::wheelEvent(QWheelEvent *e)
     _z *= pow(0.999, e->delta());
 }
 
-void GLWidget::timerEvent(QTimerEvent *)
+void GLWidget::timerEvent(QTimerEvent *e)
 {
-    double time = 1.0 * double(_time.elapsed()) / 1000.0;
-    double dt = time - _oldTime;
-    _oldTime = time;
-
-//    QTime tt;
-//    tt.start();
-    if (dt != 0.0) {
+    if (e->timerId() == _timerGL) {
         updateGL();
-        _pendulum.move(dt);
-//        _pendulum.moveAsynchronous(dt);
+    } else if (e->timerId() == _timerDP) {
+        double time = 1.0 * double(_time.elapsed()) / 1000.0;
+        double dt = time - _oldTime;
+        if (dt == 0.0)
+            return;
+        _oldTime = time;
+
+//        QTime tt;
+//        tt.start();
+        _pendulum.move2(dt);
+//        qDebug() << tt.elapsed();
     }
-//    qDebug() << tt.elapsed();
 }
 
 #include <QKeyEvent>

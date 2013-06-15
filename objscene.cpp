@@ -105,6 +105,8 @@ void ObjScene::initializeGL(const QGLContext *context)
 
     _modelLocation = _program->uniformLocation("matrixm");
     _viewLocation = _program->uniformLocation("matrixv");
+    _normalmodelLocation = _program->uniformLocation("matrixmn");
+    _normalviewLocation = _program->uniformLocation("matrixvn");
     _projectionLocation = _program->uniformLocation("matrixp");
     _ambiantLocation = _program->uniformLocation("ambiant");
     _diffuseLocation = _program->uniformLocation("diffuse");
@@ -166,6 +168,7 @@ void ObjScene::setModel(const QMatrix4x4 &m)
 {
     _program->bind();
     _program->setUniformValue(_modelLocation, m);
+    _program->setUniformValue(_normalmodelLocation, m.normalMatrix());
     _program->release();
 }
 
@@ -173,6 +176,7 @@ void ObjScene::setView(const QMatrix4x4 &v)
 {
     _program->bind();
     _program->setUniformValue(_viewLocation, v);
+    _program->setUniformValue(_normalviewLocation, v.normalMatrix());
     _program->release();
 }
 

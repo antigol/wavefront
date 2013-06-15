@@ -49,6 +49,8 @@ private:
     int _projectionLocation;
     int _viewLocation;
     int _modelLocation;
+    int _normalviewLocation;
+    int _normalmodelLocation;
 
     int _ambiantLocation;
     int _diffuseLocation;

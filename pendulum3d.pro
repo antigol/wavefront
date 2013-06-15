@@ -4,9 +4,9 @@
 #
 #-------------------------------------------------
 
-QT       += core gui opengl
+QT       += core gui opengl widgets
 
-TARGET = wavefront
+TARGET = pendulum3d
 TEMPLATE = app
 
 
@@ -38,3 +38,5 @@ OTHER_FILES += \
 
 RESOURCES += \
     data.qrc
+
+QMAKE_CXX += -std=c++11

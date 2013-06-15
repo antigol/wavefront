@@ -122,6 +122,9 @@ void SkyBox::drawGL(GLuint textureId)
     glDrawArrays(GL_QUADS, 0, 24);
     glDepthMask(GL_TRUE);
 
+    _program->disableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+    _program->disableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
+
     _program->release();
 }
 
